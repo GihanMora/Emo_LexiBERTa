@@ -4,7 +4,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 negations = ['never','not', 'no', 'didn', "didn't", 'didnt', 'didn t','doesn t', 'doesnt', "doesn't", "won't", 'won t', 'wont', "isn't","isnt","isn t", "aren't", 'aren t', 'arent', 'don t', "don't", 'dont',"haven't","haven t","havent",'weren t', "weren't", 'werent', "wasn't", 'wasn t', 'wasnt', 'wouldn t', "wouldn't", 'wouldnt', "can't", 'can t', 'couldn t',"couldn't", 'cant', 'cannot', 'couldnt', 'shouldnt', "shouldn't", 'shouldn t', 'neither', 'impossible', 'didn', 'wasn', 'weren', 'aren', 'don', 'doesn', 'couldn', 'shouldn', 'wouldn', 'won','nothing']
 
-intensity_modifiers=      ['absolutely:B_INCR:0.9', 'almost:B_DECR:0.2', 'always:B_INCR:0.9', 'amazingly:B_INCR:0.8', 'awfully:B_INCR:0.8',
+intensity_modifiers=['absolutely:B_INCR:0.9', 'almost:B_DECR:0.2', 'always:B_INCR:0.9', 'amazingly:B_INCR:0.8', 'awfully:B_INCR:0.8',
       'completely:B_INCR:0.9', 'considerable:B_INCR:0.6', 'considerably:B_INCR:0.6', 'decidedly:B_INCR:0.6', 'deeply:B_INCR:0.9',
       'effing:B_INCR:0.7', 'enormous:B_INCR:0.8', 'enormously:B_INCR:0.8', 'entirely:B_INCR:0.9', 'especially:B_INCR:0.8', 'exceptional:B_INCR:0.8',
       'exceptionally:B_INCR:0.8', 'extreme:B_INCR:0.9', 'extremely:B_INCR:0.9', 'fabulously:B_INCR:0.8', 'flippin:B_INCR:0.6', 'flipping:B_INCR:0.6',
@@ -100,15 +100,20 @@ def map_opposite_emotions(emo_dict):
         else:
           opposed_dict[opposite_emo] = emo_dict[each_key]
 
-      print(opposed_dict)
+      # print(opposed_dict)
 
       return opposed_dict
 
 
 def resolve_modifiers_and_negations(top_windows,sentence_tokens,emo_candidates,normalized_score_dict ):
+    normalized_score_dict = {k: v for k, v in sorted(normalized_score_dict.items(), key=lambda item: item[1])}
+    # print('top_windows',top_windows)
+    # print('sentence_tokens', sentence_tokens)
+    # print('emo_candidates', emo_candidates)
+    # print('normalized_score_dict', normalized_score_dict)
     fixed_top_windows = []
     for i, emoWord in enumerate(top_windows):
-
+        # print(emoWord)
         end_ind_int = sentence_tokens.index(emoWord)
         start_ind_int = end_ind_int - 3
         if start_ind_int < 0:
@@ -128,18 +133,20 @@ def resolve_modifiers_and_negations(top_windows,sentence_tokens,emo_candidates,n
                 in_sc = float(im_splits[2])
                 if (len(int_w.split()) == 1):
                     if int_w in text_chunk_int.split():
-                        # print('gotcha', im)
+                        print('got intenifier')
                         # print('emo', emo_candidates[emoWord])
-                        crnt_sc = normalized_score_dict[emo_candidates[emoWord]]
-                        normalized_score_dict[emo_candidates[emoWord]] = fix_score(crnt_sc, in_dc, in_sc)
+                        crnt_sc = normalized_score_dict[list(normalized_score_dict.keys())[-1]]
+                        # print(crnt_sc)
+                        normalized_score_dict[list(normalized_score_dict.keys())[-1]] = fix_score(crnt_sc, in_dc, in_sc)
                         # print('fixed', normalized_score_dict)
                 elif (len(int_w.split()) > 1):
                     if int_w in text_chunk_int:
-                        # print('gotcha', im)
+                        print('gotch inhibitor')
                         # print('emo', emo_candidates[emoWord])
                         # print(fix_score(0.5,in_dc,in_sc))
-                        crnt_sc = normalized_score_dict[emo_candidates[emoWord]]
-                        normalized_score_dict[emo_candidates[emoWord]] = fix_score(crnt_sc, in_dc, in_sc)
+                        crnt_sc = normalized_score_dict[list(normalized_score_dict.keys())[-1]]
+                        # print(crnt_sc)
+                        normalized_score_dict[list(normalized_score_dict.keys())[-1]] = fix_score(crnt_sc, in_dc, in_sc)
                         # print('fixed', normalized_score_dict)
 
             # check nagations
@@ -147,4 +154,4 @@ def resolve_modifiers_and_negations(top_windows,sentence_tokens,emo_candidates,n
             if (check_for_negations([text_chunk_int])):
                 print('Emotions are negated')
                 normalized_score_dict = map_opposite_emotions(normalized_score_dict)
-    return [normalized_score_dict,fixed_top_windows]
+    return [normalized_score_dict,top_windows]

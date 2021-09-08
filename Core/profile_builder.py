@@ -73,8 +73,8 @@ def build_profile(sentence ,window_size,df,tokenizer,model,keyword_extraction,mo
         # print([i[1].tolist()[0] for i in tuples])
 
         s_tup = sorted(tuples, key=lambda x: x[1])  # sort tuples based on the cosine distance
-        for kk in s_tup[::-1][:5]:
-          print(kk)
+        # for kk in s_tup[::-1][:5]:
+        #   print(kk)
         candidate_dict = s_tup[::-1][:5]
         print('*********')
 
@@ -100,7 +100,7 @@ def build_profile(sentence ,window_size,df,tokenizer,model,keyword_extraction,mo
             normalized_score_dict = resolved_output[0]
             fixed_top_windows = resolved_output[1]
 
-            print('fixed',fixed_top_windows)
+            # print('fixed',fixed_top_windows)
 
             normalized_score_dict = {k: v for k, v in sorted(normalized_score_dict.items(), key=lambda item: item[1])}
 
@@ -111,10 +111,11 @@ def build_profile(sentence ,window_size,df,tokenizer,model,keyword_extraction,mo
         sentence_emb = get_mean_pooling_emb(sentence_pieces, tokenizer, model)
         neighbour_output = get_nearest_neighbours([sentence_emb[0]], df)
         normalized_score_dict = neighbour_output[0]
+        normalized_score_dict = {k: v for k, v in sorted(normalized_score_dict.items(), key=lambda item: item[1])}
         neighbour_dict = neighbour_output[1]
         fixed_top_windows = []
 
-    return [normalized_score_dict,fixed_top_windows]
+    return [normalized_score_dict,fixed_top_windows[:1]]
 
 
 def plot_emotional_weight(x ,y):

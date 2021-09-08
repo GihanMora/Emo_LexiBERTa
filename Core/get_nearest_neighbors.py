@@ -31,7 +31,7 @@ def get_nearest_neighbours(embeding,df):
     # neaarest_neighbs_embs.append(numpy.array(embeding[0]))
     # neaarest_neighbs_labels.append('input')
 
-    print(Counter(neaarest_neighbs_labels))
+    # print(Counter(neaarest_neighbs_labels))
     t2 = datetime.now()
     diff = t2 - t1
     print('time nn and score', diff)
