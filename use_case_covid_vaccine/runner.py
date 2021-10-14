@@ -8,7 +8,7 @@ import ast
 model_path = r"E:\Projects\Emo_LexiBERTa\Finetuned_Langue_Models\DistilBERT_GoEmotions_Finetuned"
 vocab_path = r"E:\Projects\Emo_LexiBERTa\Vocabularies\goemotion_vocabulary.csv"
 
-dff = pd.read_csv(r"E:\Projects\DSI Gihan Prev\us_election_experiments\results\processed_trump_biden_all_maxes.csv")
+dff = pd.read_csv(r"E:\Projects\DSI Gihan Prev\covid_experiments\processed_preds_2021_all_meta_maxes.csv")
 
 tokenizer = DistilBertTokenizerFast.from_pretrained(model_path)
 model = AutoModel.from_pretrained(model_path)
@@ -24,7 +24,7 @@ print(len(dff))
 
 profiles = []
 kwds = []
-dff = dff[80000:100000]
+# dff = dff[80000:100000]
 for i,row in dff.iterrows():
     # print(row['text'])
     print([i,len(dff)])
@@ -39,4 +39,4 @@ print(kwds)
 dff['emo_profiles'] = profiles
 dff['emo_kwds'] = kwds
 
-dff.to_csv(r"E:\Projects\EmoLexiBerta_Gihan\Emo_LexiBERTa\use_case_DSI\processed_trump_biden_all_maxes_with_emo_80000_100000.csv")
+dff.to_csv(r"E:\Projects\EmoLexiBerta_Gihan\Emo_LexiBERTa\use_case_covid_vaccine\processed_preds_2021_all_meta_maxes_with_emo0.csv")
