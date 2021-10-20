@@ -44,6 +44,31 @@ def get_mean_pooling_emb(sentences,tokenizer,model):
 
     return sentence_embeddings
 
+#converting tokenizer embedded token id lists to human readable word lists
+def convet_encordings_to_words(input_encodings,tokenizer):
+    tokens = []
+    for each_sent in input_encodings["input_ids"]:
+        tokens.append(tokenizer.convert_ids_to_tokens(each_sent))
+    return tokens
+
+
+def optimized_kwd_extractor(sentence, tokenizer, model):
+    print('optimized')
+    print(sentence)
+    device = "cuda:1" if torch.cuda.is_available() else "cpu"
+    print(device)
+    encoded_input = tokenizer(sentence, padding=True, truncation=True, max_length=128, return_tensors='pt').to(device)
+    # Compute token embeddings
+    print('enc_inp',encoded_input)
+    with torch.no_grad():
+        model = model.to(device)
+        model_output = model(**encoded_input)
+
+    sentence_embeddings_raw = mean_pooling(model_output, encoded_input['attention_mask'])
+    sentence_embeddings = sentence_embeddings_raw.tolist()
+
+    wp_tokens = convet_encordings_to_words(encoded_input,tokenizer)
+    print(wp_tokens)
 
 
 def build_profile(sentence ,window_size,df,tokenizer,model,keyword_extraction,modifier_detection):
@@ -51,7 +76,7 @@ def build_profile(sentence ,window_size,df,tokenizer,model,keyword_extraction,mo
 
 
     if(keyword_extraction):
-
+        # optimized_kwd_extractor(sentence, tokenizer, model)
         sentence_tokens = sentence.split(' ')
         sentence_pieces = [sentence]
         for i in range(0, len(sentence_tokens) + 1 - window_size):
