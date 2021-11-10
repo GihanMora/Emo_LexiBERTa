@@ -133,7 +133,7 @@ def resolve_modifiers_and_negations(top_windows,sentence_tokens,emo_candidates,n
                 in_sc = float(im_splits[2])
                 if (len(int_w.split()) == 1):
                     if int_w in text_chunk_int.split():
-                        print('got intenifier')
+                        print('got single word modifier')
                         # print('emo', emo_candidates[emoWord])
                         crnt_sc = normalized_score_dict[list(normalized_score_dict.keys())[-1]]
                         # print(crnt_sc)
@@ -141,12 +141,13 @@ def resolve_modifiers_and_negations(top_windows,sentence_tokens,emo_candidates,n
                         # print('fixed', normalized_score_dict)
                 elif (len(int_w.split()) > 1):
                     if int_w in text_chunk_int:
-                        print('gotch inhibitor')
+                        print('got multi word modifier')
                         # print('emo', emo_candidates[emoWord])
                         # print(fix_score(0.5,in_dc,in_sc))
                         crnt_sc = normalized_score_dict[list(normalized_score_dict.keys())[-1]]
                         # print(crnt_sc)
                         normalized_score_dict[list(normalized_score_dict.keys())[-1]] = fix_score(crnt_sc, in_dc, in_sc)
+
                         # print('fixed', normalized_score_dict)
 
             # check nagations
@@ -154,4 +155,11 @@ def resolve_modifiers_and_negations(top_windows,sentence_tokens,emo_candidates,n
             if (check_for_negations([text_chunk_int])):
                 print('Emotions are negated')
                 normalized_score_dict = map_opposite_emotions(normalized_score_dict)
+
+    intensity_sum = 0
+    for e_key in list(normalized_score_dict.keys()):
+        intensity_sum=intensity_sum+normalized_score_dict[e_key]
+    for e_key in list(normalized_score_dict.keys()):
+        if(intensity_sum!=0):
+            normalized_score_dict[e_key] = round((normalized_score_dict[e_key]/intensity_sum),3)
     return [normalized_score_dict,top_windows]

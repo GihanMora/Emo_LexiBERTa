@@ -1,3 +1,4 @@
+import random
 from datetime import datetime
 import torch
 from sklearn.metrics.pairwise import cosine_similarity
@@ -31,7 +32,9 @@ def mean_pooling(model_output, attention_mask):
 
 
 def get_mean_pooling_emb(sentences,tokenizer,model):
-    device = "cuda:1" if torch.cuda.is_available() else "cpu"
+    number_of_gpu_cores = 2
+    gpu_core = random.randint(0, number_of_gpu_cores-1)
+    device = "cuda:"+str(gpu_core) if torch.cuda.is_available() else "cpu"
     print(device)
     encoded_input = tokenizer(sentences, padding=True, truncation=True, max_length=128, return_tensors='pt').to(device)
     # Compute token embeddings
