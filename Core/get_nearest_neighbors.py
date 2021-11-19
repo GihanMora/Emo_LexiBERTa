@@ -37,3 +37,8 @@ def get_nearest_neighbours(embeding,df):
     print('time nn and score', diff)
 
     return [n_score_dict,{'words':neaarest_neighbs_words,'embs':neaarest_neighbs_embs,'labels':neaarest_neighbs_labels}]
+
+
+
+def get_nearest_neighbors_alpha(embedding,df):
+    print()

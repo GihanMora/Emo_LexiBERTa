@@ -52,13 +52,13 @@ if __name__ == "__main__":
     df['embedding'] = [ast.literal_eval(i) for i in df['embedding'].values.tolist()]
 
     # sentence = "always thought that nigger was a faggot"
-    sentence = "Muslims are so disgusting"
+    sentence = "Muslims are friendly"
     pred = build_profile(sentence,1,df,tokenizer,model,keyword_extraction=True,modifier_detection=True)
     print(pred)
 
-    # sentence = "muslims are very friendly"
-    # pred = build_profile(sentence, 1, df, tokenizer, model, keyword_extraction=True, modifier_detection=True)
-    # print(pred)
+    sentence = "muslims are extremely friendly"
+    pred = build_profile(sentence, 1, df, tokenizer, model, keyword_extraction=True, modifier_detection=True)
+    print(pred)
     #
     # sentence = "muslims are not friendly"
     # pred = build_profile(sentence, 1, df, tokenizer, model, keyword_extraction=True, modifier_detection=True)
