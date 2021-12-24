@@ -1,6 +1,7 @@
 import pandas as pd
 import ast
-df = pd.read_csv(r"E:\Projects\EmoLexiBerta_Gihan\Emo_LexiBERTa\use_case_DSI\processed_trump_biden_emo_all.csv")
+# df = pd.read_csv(r"E:\Projects\EmoLexiBerta_Gihan\Emo_LexiBERTa\use_case_DSI\processed_trump_biden_emo_all.csv")
+df = pd.read_csv(r"E:\Projects\Emotion_work_Gihan\Emo_LexiBERTa\use_case_DSI\processed_trump_biden_emo_wd_str_eight.csv")
 
 print(df.columns)
 HS_keys = []
@@ -21,4 +22,4 @@ for i,row in df.iterrows():
 df['HS_keys'] = HS_keys
 df['emo_keys'] = emo_keys
 
-df.to_csv(r"E:\Projects\EmoLexiBerta_Gihan\Emo_LexiBERTa\use_case_DSI\processed_trump_biden_emo_all_topivot.csv")
+df.to_csv(r"E:\Projects\Emotion_work_Gihan\Emo_LexiBERTa\use_case_DSI\processed_trump_biden_emo_all_topivot_eight.csv")
